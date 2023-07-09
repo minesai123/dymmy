@@ -21,6 +21,7 @@ jobs:
       - name: Prisma Cloud image scan
         id: scan
         uses: PaloAltoNetworks/prisma-cloud-scan@v1
+        if: always()
       
         with:
           pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
