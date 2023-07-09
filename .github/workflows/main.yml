@@ -23,6 +23,8 @@ jobs:
           pcc_user: ${{ secrets.PCC_USER }}
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
+      - name: init codeql
+        uses: github/codeql-action/upload-sarif@v2
 
       # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
