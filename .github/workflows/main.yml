@@ -27,9 +27,7 @@ jobs:
         if: always()
       
         with:
-          pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
-          pcc_user: ${{ secrets.PCC_USER }}
-          pcc_pass: ${{ secrets.PCC_PASS }}
+          token: ${{ secrets.PRISMA_CLOUD_TOKEN }}
           image_name: ${{ env.IMAGE_NAME }}
 
       # (Optional) for compatibility with GitHub's code scanning alerts
