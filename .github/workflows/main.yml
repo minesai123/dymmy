@@ -23,7 +23,7 @@ jobs:
 
       - name: Prisma Cloud image scan
         id: scan
-        uses: PaloAltoNetworks/prisma-cloud-scan@v1
+        uses: paloaltonetworks/prisma-cloud-scan@master
         if: always()
       
         with:
