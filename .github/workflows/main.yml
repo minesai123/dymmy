@@ -14,17 +14,19 @@ jobs:
 
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
+      - name: init codeql
+        uses: github/codeql-action/init@v2
+        if: always()
 
       - name: Prisma Cloud image scan
         id: scan
         uses: PaloAltoNetworks/prisma-cloud-scan@v1
+      
         with:
           pcc_console_url: ${{ secrets.PCC_CONSOLE_URL }}
           pcc_user: ${{ secrets.PCC_USER }}
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
-      - name: init codeql
-        uses: github/codeql-action/upload-sarif@v2
 
       # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
