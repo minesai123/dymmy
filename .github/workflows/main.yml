@@ -2,7 +2,10 @@ on: [ push, workflow_dispatch ]
 
 env:
   IMAGE_NAME: ${{ github.repository }}:${{ github.sha }}
-
+permissions:
+    id-token: write
+    contents: write              # This is required for actions/checkout@v1
+    security-events: write   # To upload sarif files
 jobs:
   build-and-scan:
     name: Build and scan image
