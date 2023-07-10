@@ -24,7 +24,7 @@ jobs:
         uses: github/codeql-action/init@v2
         if: always()
 
-      - name: Prisma Cloud image scan
+      - name: Prisma Cloud image scans
         id: scan
         uses: PaloAltoNetworks/prisma-cloud-scan@v1
         if: always()
