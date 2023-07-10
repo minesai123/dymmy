@@ -2,10 +2,12 @@ on: [ push, workflow_dispatch ]
 
 env:
   IMAGE_NAME: ${{ github.repository }}:${{ github.sha }}
+  
 permissions:
     id-token: write
-    contents: write              # This is required for actions/checkout@v1
-    security-events: write   # To upload sarif files
+    contents: write             
+    security-events: write  
+    
 jobs:
   build-and-scan:
     name: Build and scan image
@@ -17,6 +19,7 @@ jobs:
 
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
+        
       - name: init codeql
         uses: github/codeql-action/init@v2
         if: always()
