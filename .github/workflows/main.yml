@@ -35,13 +35,13 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - name: Install jq
-        run: sudo apt-get install jq -y
+      - name: Install SARIF Log Converter Action
+        uses: github/codeql-action/init@v1
 
       - name: Convert JSON to SARIF
         run: |
           # Convert the JSON file to SARIF
-          cat pcc_scan_results.json | jq -c '.' > pcc_scan_results.sarif
+          java -jar ${{ github.workspace }}/sarif-log-converter.jar -s pcc_scan_results.json -t pcc_scan_results.sarif
         if: always()
           
      
