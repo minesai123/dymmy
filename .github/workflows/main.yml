@@ -35,13 +35,16 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - name: Install SARIF Log Converter Action
-        uses: github/codeql-action/init@v1
+      - name: Install SARIF Conversion Tool
+        run: |
+          git clone https://github.com/github/sarif-conversion-tool.git
+          cd sarif-conversion-tool
+          npm install
 
       - name: Convert JSON to SARIF
         run: |
-          # Convert the JSON file to SARIF
-          java -jar ${{ github.workspace }}/sarif-log-converter.jar -s pcc_scan_results.json -t pcc_scan_results.sarif
+          cd sarif-conversion-tool
+          ./bin/sarif-converter pcc_scan_results.json -t sarif > pcc_scan_results.sarif
         if: always()
           
      
