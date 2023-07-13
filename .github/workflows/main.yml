@@ -34,11 +34,18 @@ jobs:
           pcc_user: ${{ secrets.PCC_USER }}
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
-          
-      - name: Prisma Cloud image scans
-        run: json-to-sarif pcc_scan_results.json pcc_scan_results.sarif
-        if: always()
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
 
+      - name: Install dependencies
+        run: npm install sarif
+
+      - name: Convert JSON to SARIF
+        run: node convert.js pcc_scan_results.json pcc_scan_results.sarif
+          
+     
       # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
         if: ${{ always() }} # necessary if using failure thresholds in the image scan
