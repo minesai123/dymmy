@@ -35,11 +35,18 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - name: Download JSON file
-        uses: actions/download-artifact@v2
-        with:
-          name: json-file
+      - name: Convert JSON to SARIF
+        run: |
+          # Convert the JSON file to SARIF
+          npm install -g sarif-converter
+          sarif-converter pcc_scan_results.json pcc_scan_results.sarif
         if: always()
+          
+      - name: Upload SARIF file
+        if: ${{ always() }} # necessary if using failure thresholds in the image scan
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif_file }}
      
        
        
