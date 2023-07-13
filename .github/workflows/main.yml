@@ -37,11 +37,8 @@ jobs:
           
       - name: Convert JSON to SARIF
         run: |
-          # Install the required dependencies
-           npm install -g json-to-sarif  
-
-          # Convert the JSON file to SARIF
-          json-to-sarif --input pcc_scan_results.json --output pcc_scan_results.sarif
+          # Convert the JSON file to SARIF using jq
+          cat pcc_scan_results.json | jq -c '.' > pcc_scan_results.sarif
         if: always()
           
      
