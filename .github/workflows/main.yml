@@ -35,23 +35,10 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - name: Install SARIF Conversion Tool
-        run: |
-          git clone https://github.com/github/sarif-conversion-tool.git
-          cd sarif-conversion-tool
-          npm install
-        if: always()
-
-      - name: Convert JSON to SARIF
-        run: |
-          cd sarif-conversion-tool
-          ./bin/sarif-converter pcc_scan_results.json -t sarif > pcc_scan_results.sarif
-        if: always()
-          
      
       # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
         if: ${{ always() }} # necessary if using failure thresholds in the image scan
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: pcc_scan_results.sarif
+          sarif_file: pcc_scan_results.sarif.json
