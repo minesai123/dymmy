@@ -34,8 +34,10 @@ jobs:
           pcc_user: ${{ secrets.PCC_USER }}
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
-     # - name: Prisma Cloud image scans
-     #   run: json-to-sarif pcc_scan_results.json pcc_scan_results.sarif
+          
+      - name: Prisma Cloud image scans
+        run: json-to-sarif pcc_scan_results.json pcc_scan_results.sarif
+        if: always()
 
       # (Optional) for compatibility with GitHub's code scanning alerts
       - name: Upload SARIF file
