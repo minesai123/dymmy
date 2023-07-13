@@ -35,10 +35,13 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
+      - name: Install SARIF CLI
+        run: npm install -g @githubsecurity/sarif-action
+
       - name: Convert JSON to SARIF
         run: |
-          # Convert the JSON file to SARIF using jq
-          cat pcc_scan_results.json | jq -c '.' > pcc_scan_results.sarif
+          # Convert the JSON file to SARIF
+          sarif-action  pcc_scan_results.json --output=pcc_scan_results.sarif
         if: always()
           
      
