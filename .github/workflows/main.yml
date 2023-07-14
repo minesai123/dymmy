@@ -35,18 +35,18 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - name: Convert JSON to SARIF
-        run: |
-         python -m pip install --upgrade pip
-         pip install joern2sarif
-         joern2sarif -i pcc_scan_results.json -o pcc_scan_results.sarif
-        if: always()
-          
-      - name: Upload SARIF file
-        if: ${{ always() }} # necessary if using failure thresholds in the image scan
-        uses: github/codeql-action/upload-sarif@v2
+        - name: Convert Container Scan Report to SARIF
+        id: scan-to-sarif
+        uses: rm3l/container-scan-to-sarif-action@v1
+        if: ${{ always() }}
         with:
-          sarif_file: pcc_scan_results.sarif
+          input-file: pcc_scan_results.json
+      - name: Upload SARIF reports to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: ${{ always() }}
+        with:
+          sarif_file: ${{ steps.scan-to-sarif.outputs.sarif-report-path }}
+     
           #sarif_file: ${{ steps.scan.outputs.sarif_file }}
      
        
