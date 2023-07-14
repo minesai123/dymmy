@@ -20,9 +20,9 @@ jobs:
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
         
-      - name: init codeql
-        uses: github/codeql-action/init@v2
-        if: always()
+     # - name: init codeql
+      #  uses: github/codeql-action/init@v2
+      #  if: always()
 
       - name: Prisma Cloud image scans
         id: scan
@@ -37,11 +37,9 @@ jobs:
           
       - name: Convert JSON to SARIF
         run: |
-         curl -fsSL https://raw.githubusercontent.com/ivan-sincek/mixaudit-sarif/main/src/mixaudit_sarif.py -o mixaudit_sarif.py
-         curl -fsSL https://raw.githubusercontent.com/ivan-sincek/mixaudit-sarif/main/src/requirements.txt -o requirements.txt
          python -m pip install --upgrade pip
-         pip install -r requirements.txt
-         python mixaudit_sarif.py -f pcc_scan_results.json -o pcc_scan_results.sarif
+         pip install joern2sarif
+         joern2sarif -i pcc_scan_results.json -o pcc_scan_results.sarif
         if: always()
           
       - name: Upload SARIF file
