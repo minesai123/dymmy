@@ -35,27 +35,21 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - uses: actions/checkout@v2
-      - run: npm ci
-      - run: npm test
-      - uses: codecov/codecov-action@v1
-        with:
-          fail_ci_if_error: true
-        if: always()
-     
-      - uses: actions/checkout@v2
-      - uses: ./
-        with:
-          type: checkov
-          input: ./pcc_scan_results.json
-          output: ./pcc_scan_results.sarif
+      - name: Convert JSON to SARIF
+        run: |
+         curl -fsSL https://raw.githubusercontent.com/ivan-sincek/mixaudit-sarif/main/src/mixaudit_sarif.py -o mixaudit_sarif.py
+         curl -fsSL https://raw.githubusercontent.com/ivan-sincek/mixaudit-sarif/main/src/requirements.txt -o requirements.txt
+         python -m pip install --upgrade pip
+         pip install -r requirements.txt
+         python mixaudit_sarif.py -f pcc_scan_results.json -o pcc_scan_results.sarif
         if: always()
           
       - name: Upload SARIF file
         if: ${{ always() }} # necessary if using failure thresholds in the image scan
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: ${{ steps.scan.outputs.sarif_file }}
+          sarif_file: pcc_scan_results.sarif
+          #sarif_file: ${{ steps.scan.outputs.sarif_file }}
      
        
        
