@@ -35,11 +35,19 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - name: Convert JSON to SARIF
-        run: |
-          # Convert the JSON file to SARIF
-          npm install -g sarif-converter
-          sarif-converter pcc_scan_results.json pcc_scan_results.sarif
+      - uses: actions/checkout@v2
+      - run: npm ci
+      - run: npm test
+      - uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+     
+      - uses: actions/checkout@v2
+      - uses: ./
+        with:
+          type: checkov
+          input: ./pcc_scan_results.json
+          output: ./pcc_scan_results.sarif
         if: always()
           
       - name: Upload SARIF file
