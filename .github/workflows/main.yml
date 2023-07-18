@@ -40,7 +40,7 @@ jobs:
           python-version: 3.11
         if: always()
       - name: Run Python script
-        run: python parser.py  ${{ steps.scan.outputs.sarif_file }} >> ${{ steps.scan.outputs.sarif_file }}
+        run: python parser.py  ${{ steps.scan.outputs.sarif_file }} > ${{ steps.scan.outputs.sarif_file }}
         if: always()
  
      #In this example, the GitHub Actions 
