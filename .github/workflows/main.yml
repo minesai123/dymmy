@@ -40,7 +40,7 @@ jobs:
           python-version: 3.11
         if: always()
       - name: Run Python script
-        run: python parser.py  ${{ steps.scan.outputs.sarif_file }} > ${{ steps.scan.outputs.sarif_file }}
+        run: python parser.py  ${{ steps.scan.outputs.sarif_file }} > output.sarif
         if: always()
  
      #In this example, the GitHub Actions 
@@ -48,7 +48,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
-         sarif_file: ${{ steps.scan.outputs.sarif_file }}
+         sarif_file: output.sarif
      
        
        
