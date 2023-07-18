@@ -40,15 +40,15 @@ jobs:
           python-version: 3.11
         if: always()
       - name: Run Python script
-        run: python parser.py  ${{ steps.scan.outputs.sarif_file }} > output.sarif.json
+        run: python parser.py  ${{ steps.scan.outputs.sarif_file }} > output.sarif
         if: always()
  
      #In this example, the GitHub Actions 
       - name: Upload SARIF reports to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
-         sarif_file: output.sarif.json
+         sarif_file: output.sarif
      
        
        
