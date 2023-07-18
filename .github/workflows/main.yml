@@ -34,14 +34,28 @@ jobs:
           pcc_user: ${{ secrets.PCC_USER }}
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install json
+          pip install re
+          pip install sys
+        if: always()
+      - name: Run Python script
+        run: python parser.py  ${{ steps.scan.outputs.sarif_file }} >> ${{ steps.scan.outputs.sarif_file }}
+        if: always()
           
           
 #In this example, the GitHub Actions 
-      - name: Upload SARIF reports to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        if: always()
-        with:
-         sarif_file: ${{ steps.scan.outputs.sarif_file }}
+   #   - name: Upload SARIF reports to GitHub Security tab
+  #      uses: github/codeql-action/upload-sarif@v1
+   #     if: always()
+  #      with:
+  #       sarif_file: ${{ steps.scan.outputs.sarif_file }}
      
        
        
