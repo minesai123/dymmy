@@ -35,17 +35,19 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - name: Convert Container Scan Report to SARIF
-        id: scan-to-sarif
-        uses: rm3l/container-scan-to-sarif-action@v1
-        if: ${{ always() }}
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
         with:
-          input-file: pcc_scan_results.json
-      - name: Upload SARIF reports to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        if: ${{ always() }}
-        with:
-          sarif_file: ${{ steps.scan-to-sarif.outputs.sarif-report-path }}
+          name: Test Results
+          path: ${{ steps.scan.outputs.sarif_file }}
+          
+          
+#In this example, the GitHub Actions 
+      #- name: Upload SARIF reports to GitHub Security tab
+      #uses: github/codeql-action/upload-sarif@v2
+      #  if: ${{ always() }}
+      #  with:
+      #    sarif_file: ${{ steps.scan-to-sarif.outputs.sarif-report-path }}
      
           #sarif_file: ${{ steps.scan.outputs.sarif_file }}
      
