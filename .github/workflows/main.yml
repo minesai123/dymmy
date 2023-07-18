@@ -35,7 +35,7 @@ jobs:
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
           
-      - name: Upload Artifactss
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: Test Results
