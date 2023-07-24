@@ -1,32 +1,30 @@
-name: Terraform Security Scan
-
+name: tfsec
 on:
   push:
     branches:
       - main
-      # Add other branches if needed
-
+  pull_request:
 jobs:
   tfsec:
-    name: Tfsec Security Scan
+    name: tfsec sarif report
     runs-on: ubuntu-latest
-
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
-      - name: Checkout code
+      - name: Clone repo
         uses: actions/checkout@v2
-
-      - name: Install Tfsec
-        run: |
-          curl -L -o tfsec https://github.com/tfsec/tfsec/releases/latest/download/tfsec-linux-amd64
-          chmod +x tfsec
-          sudo mv tfsec /usr/local/bin/
-
-      - name: Run Tfsec and Generate SARIF Output
-        id: tfsec
-        run: |
-          tfsec --format=sarif ./ > results.sarif
-
-      - name: Upload SARIF results
-        uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: results.sarif
+          persist-credentials: false
+
+      - name: tfsec
+        uses: aquasecurity/tfsec-sarif-action@v0.1.0
+        with:
+          sarif_file: tfsec.sarif          
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: tfsec.sarif         
