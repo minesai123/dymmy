@@ -19,10 +19,6 @@ jobs:
 
       - name: Build the image
         run: docker build -t $IMAGE_NAME .
-        
-     # - name: init codeql
-      #  uses: github/codeql-action/init@v2
-      #  if: always()
 
       - name: Prisma Cloud image scans
         id: scan
@@ -34,21 +30,13 @@ jobs:
           pcc_user: ${{ secrets.PCC_USER }}
           pcc_pass: ${{ secrets.PCC_PASS }}
           image_name: ${{ env.IMAGE_NAME }}
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.11
-        if: always()
-      - name: Run Python script
-        run: python parser.py  ${{ steps.scan.outputs.sarif_file }} > output.sarif
-        if: always()
  
      #In this example, the GitHub Actions 
       - name: Upload SARIF reports to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
-         sarif_file: output.sarif
+         sarif_file: ${{ steps.scan.outputs.sarif_file }}
      
        
        
